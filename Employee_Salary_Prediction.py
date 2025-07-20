@@ -14,13 +14,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
-from sklearn.calibration import CalibratedClassifierCV  # for probability estimates
+from sklearn.calibration import CalibratedClassifierCV  
 import joblib
 
-# ==============================
-# Settings
-# ==============================
-DATA_PATH = "/Users/pallavipaasamgmail.com/Downloads/adult 3.csv"
+DATA_PATH = "Employees_salary_dataset.csv"
 PLOTS_DIR = "model_graphs"
 os.makedirs(PLOTS_DIR, exist_ok=True)
 
@@ -36,22 +33,21 @@ print(f"Initial dataset shape: {data.shape}")
 # ==============================
 # Step 2: Clean and preprocess
 # ==============================
-# Replace missing values
+
 data['workclass'] = data['workclass'].replace({'?': 'Others'})
 data['occupation'] = data['occupation'].replace({'?': 'Others'})
 
-# Remove irrelevant rows
 data = data[~data['workclass'].isin(['Without-pay', 'Never-worked'])]
 
-# Remove outliers
+
 data = data[(data['age'] >= 17) & (data['age'] <= 75)]
 data = data[(data['educational-num'] >= 5) & (data['educational-num'] <= 16)]
 
-# Drop redundant column
+
 if 'education' in data.columns:
     data = data.drop(columns=['education'])
 
-# Encode categorical variables
+
 encoder = LabelEncoder()
 categorical_cols = ['workclass', 'marital-status', 'occupation', 'relationship', 'race', 'gender', 'native-country']
 for col in categorical_cols:
@@ -81,9 +77,7 @@ models = {
 }
 results = {}
 
-# ==============================
-# Helper functions for plotting
-# ==============================
+
 def save_confusion_matrix(cm, labels, title, filename):
     plt.figure(figsize=(5, 4))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels)
@@ -128,11 +122,11 @@ for name, model in models.items():
     print(f"\n{name} Accuracy: {acc:.4f}")
     print(classification_report(y_test, preds))
 
-    # Save Confusion Matrix
+
     cm = confusion_matrix(y_test, preds)
     save_confusion_matrix(cm, ["<=50K", ">50K"], f"{name} - Confusion Matrix", f"{name}_confusion.png")
 
-    # Save ROC Curve (if available)
+   
     if probas is not None:
         save_roc_curve(y_test, probas, f"{name} - ROC Curve", f"{name}_roc.png")
 
@@ -140,7 +134,7 @@ for name, model in models.items():
 # Step 6: Save best pipeline (with scaler)
 # ==============================
 best_model_name = max(results, key=results.get)
-best_pipeline = pipelines[best_model_name]  # includes scaler + model
+best_pipeline = pipelines[best_model_name]  
 joblib.dump(best_pipeline, "best_model.pkl")
 print(f"\nBest model saved: {best_model_name} with accuracy {results[best_model_name]:.4f}")
 
