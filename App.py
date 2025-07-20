@@ -3,12 +3,9 @@ import pandas as pd
 import joblib
 import os
 
-# ==========================
-# Page Config & Style
-# ==========================
+
 st.set_page_config(page_title="Employee Salary Prediction", page_icon="💼", layout="wide")
 
-# Custom CSS for overall app style
 st.markdown("""
     <style>
     /* Background Gradient */
@@ -86,7 +83,7 @@ except Exception:
 st.sidebar.header("📝 Enter Employee Details")
 st.sidebar.markdown("Customize employee profile to predict salary category.")
 
-# Dropdown options
+
 workclass_options = ['Private', 'Self-emp', 'Government', 'Others']
 marital_status_options = ['Married', 'Single', 'Divorced', 'Widowed']
 occupation_options = ['Tech-support', 'Craft-repair', 'Sales', 'Exec-managerial', 'Prof-specialty', 'Others']
@@ -95,7 +92,7 @@ race_options = ['White', 'Black', 'Asian', 'Other']
 gender_options = ['Male', 'Female']
 native_country_options = ['United-States', 'Mexico', 'India', 'Other']
 
-# Inputs
+
 age = st.sidebar.slider("Age", 18, 75, 30)
 workclass = st.sidebar.selectbox("Workclass", workclass_options)
 marital_status = st.sidebar.selectbox("Marital Status", marital_status_options)
@@ -108,9 +105,7 @@ educational_num = st.sidebar.slider("Educational Number (5–16)", 5, 16, 10)
 capital_gain = st.sidebar.number_input("Capital Gain", 0, 99999, 0)
 hours_per_week = st.sidebar.slider("Hours per week", 1, 80, 40)
 
-# ==========================
-# Prepare Input Data
-# ==========================
+
 input_df = pd.DataFrame([{
     "age": age,
     "workclass": workclass,
